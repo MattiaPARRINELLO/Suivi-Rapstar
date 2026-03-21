@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rapstar - Suivi Accreditations Photo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <section id="loginView" class="view active">
+        <div class="auth-card">
+          <div class="logo-wrap">
+            <img id="loginLogoImg" class="logo-img hidden" alt="Logo media" />
+            <div id="loginLogoFallback" class="logo-text">Rapstar</div>
+          </div>
+          <h1 id="loginMediaName">Rapstar</h1>
+          <p>Suivi des demandes d'accreditation photo</p>
+          <form id="loginForm">
+            <label>
+              Email
+              <input type="email" name="email" required autocomplete="username" />
+            </label>
+            <label>
+              Mot de passe
+              <input type="password" name="password" required autocomplete="current-password" />
+            </label>
+            <button type="submit">Connexion</button>
+          </form>
+          <p id="loginError" class="error"></p>
+        </div>
+      </section>
+
+      <section id="dashboardView" class="view">
+        <header class="topbar">
+          <div class="brand">
+            <div class="logo-wrap small">
+              <img id="headerLogoImg" class="logo-img hidden" alt="Logo media" />
+              <div id="headerLogoFallback" class="logo-text">Rapstar</div>
+            </div>
+            <span id="headerMediaName">Rapstar</span>
+          </div>
+          <nav class="tabs">
+            <button class="tab active" data-view="concerts">Concerts</button>
+            <button class="tab" data-view="jour">Jour du concert</button>
+            <button class="tab" data-view="tourneurs">Tourneurs</button>
+            <button class="tab" data-view="settings">Parametres</button>
+            <button class="tab" data-view="config">Configuration</button>
+          </nav>
+          <div class="session-meta">
+            <span id="currentUser"></span>
+            <button id="logoutBtn" class="ghost">Deconnexion</button>
+          </div>
+        </header>
+
+        <main>
+          <section id="concertsSection" class="panel active">
+            <div class="panel-head">
+              <h2>Tableau des concerts</h2>
+              <button id="addConcertBtn">Ajouter un concert</button>
+            </div>
+            <div class="toolbar">
+              <label>
+                Recherche instantanee
+                <input id="concertSearch" placeholder="Artiste, ville, lieu, contact..." />
+              </label>
+              <label>
+                Filtrer par statut
+                <select id="statusFilter"></select>
+              </label>
+              <label>
+                Trier par date
+                <select id="dateSort">
+                  <option value="asc">Plus proche d'abord</option>
+                  <option value="desc">Plus loin d'abord</option>
+                </select>
+              </label>
+              <span id="lastSync" class="sync"></span>
+              <span class="sync">Raccourcis: N nouveau, / recherche, G mode jour</span>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Artiste</th>
+                    <th>Date</th>
+                    <th>Lieu</th>
+                    <th>Ville</th>
+                    <th>Statut</th>
+                    <th>Urgence</th>
+                    <th>Contact qui a repondu</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="concertRows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="jourSection" class="panel">
+            <div class="panel-head">
+              <h2>Mode Jour du concert</h2>
+            </div>
+            <div id="jourRows" class="jour-grid"></div>
+          </section>
+
+          <section id="tourneursSection" class="panel">
+            <div class="panel-head">
+              <h2>Tourneurs fiables</h2>
+              <button id="addTourneurBtn">Ajouter un tourneur</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Email(s)</th>
+                    <th>Artistes geres</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tourneurRows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="settingsSection" class="panel">
+            <div class="panel-head">
+              <h2>Parametres utilisateur</h2>
+            </div>
+            <form id="userSettingsForm" class="card-form">
+              <label>
+                Nouvel email
+                <input type="email" name="email" required />
+              </label>
+              <label>
+                Mot de passe actuel (obligatoire)
+                <input type="password" name="currentPassword" required />
+              </label>
+              <label>
+                Nouveau mot de passe (optionnel)
+                <input type="password" name="newPassword" />
+              </label>
+              <label>
+                Confirmation nouveau mot de passe
+                <input type="password" name="confirmPassword" />
+              </label>
+              <button type="submit">Enregistrer mes parametres</button>
+              <p id="userSettingsMessage" class="message"></p>
+            </form>
+          </section>
+
+          <section id="configSection" class="panel">
+            <div class="panel-head">
+              <h2>Configuration globale</h2>
+            </div>
+            <form id="globalConfigForm" class="card-form">
+              <label>
+                Nom du media
+                <input name="mediaName" required />
+              </label>
+              <div class="grid">
+                <label>
+                  Seuil urgence rouge (jours)
+                  <input name="urgencyRedDays" type="number" min="1" required />
+                </label>
+                <label>
+                  Seuil urgence jaune (jours)
+                  <input name="urgencyYellowDays" type="number" min="1" required />
+                </label>
+              </div>
+
+              <section class="contacts-block">
+                <div class="contacts-head">
+                  <h4>Statuts disponibles</h4>
+                  <button type="button" id="addStatusBtn" class="ghost">Ajouter statut</button>
+                </div>
+                <div id="statusList"></div>
+              </section>
+
+              <section class="contacts-block">
+                <div class="contacts-head">
+                  <h4>Logo personnalise</h4>
+                </div>
+                <label>
+                  Upload PNG, JPG ou SVG
+                  <input type="file" id="logoFileInput" accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/svg+xml" />
+                </label>
+                <button type="button" id="uploadLogoBtn" class="ghost">Uploader le logo</button>
+              </section>
+
+              <button type="submit">Sauvegarder la configuration</button>
+              <p id="globalConfigMessage" class="message"></p>
+            </form>
+          </section>
+        </main>
+      </section>
+    </div>
+
+    <dialog id="concertDialog">
+      <form id="concertForm" method="dialog">
+        <h3 id="concertDialogTitle">Ajouter un concert</h3>
+        <input type="hidden" name="id" />
+
+        <div class="grid">
+          <label>
+            Artiste
+            <input name="artist" required />
+          </label>
+          <label>
+            Tourneur lie
+            <select name="linkedTourneurId" id="concertTourneurSelect"></select>
+          </label>
+          <label>
+            Lieu
+            <input name="venue" required />
+          </label>
+          <label>
+            Ville
+            <input name="city" required />
+          </label>
+          <label>
+            Statut
+            <select name="status" id="concertStatus"></select>
+          </label>
+        </div>
+
+        <section class="contacts-block">
+          <div class="contacts-head">
+            <h4>Dates visees</h4>
+            <button type="button" id="addDateBtn" class="ghost">Ajouter date</button>
+          </div>
+          <div id="datesList"></div>
+        </section>
+
+        <label>
+          Notes
+          <textarea name="notes" rows="4"></textarea>
+        </label>
+
+        <label>
+          Notes pratiques (visible uniquement dans la fiche)
+          <textarea name="practicalNotes" rows="4" placeholder="Conditions photo, timings, contraintes techniques..."></textarea>
+        </label>
+
+        <section class="contacts-block">
+          <div class="contacts-head">
+            <h4>Contacts (max 10)</h4>
+            <button type="button" id="addContactBtn" class="ghost">Ajouter contact</button>
+          </div>
+          <div id="contactsList"></div>
+        </section>
+
+        <p class="error" id="concertError"></p>
+
+        <menu>
+          <button value="cancel" class="ghost" type="button" id="cancelConcertBtn">Annuler</button>
+          <button value="default" type="submit">Enregistrer</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <dialog id="concertDetailDialog">
+      <div class="detail-content">
+        <h3 id="detailTitle">Fiche concert</h3>
+        <p id="detailMeta"></p>
+        <section>
+          <h4>Dates visees</h4>
+          <ul id="detailDates"></ul>
+        </section>
+        <section>
+          <h4>Contacts</h4>
+          <ul id="detailContacts"></ul>
+        </section>
+        <section>
+          <h4>Notes</h4>
+          <p id="detailNotes"></p>
+        </section>
+        <section>
+          <h4>Notes pratiques</h4>
+          <p id="detailPracticalNotes"></p>
+        </section>
+        <section>
+          <h4>Historique</h4>
+          <ul id="detailHistory"></ul>
+        </section>
+        <menu>
+          <button id="exportPdfBtn" class="ghost" type="button">Exporter PDF</button>
+          <button id="closeDetailBtn" type="button">Fermer</button>
+        </menu>
+      </div>
+    </dialog>
+
+    <dialog id="tourneurDialog">
+      <form id="tourneurForm" method="dialog">
+        <h3 id="tourneurDialogTitle">Ajouter un tourneur</h3>
+        <input type="hidden" name="id" />
+        <label>
+          Nom
+          <input name="name" required />
+        </label>
+        <label>
+          Email(s) (separes par virgule)
+          <input name="emails" />
+        </label>
+        <label>
+          Artistes geres (separes par virgule)
+          <input name="artists" />
+        </label>
+        <p class="error" id="tourneurError"></p>
+        <menu>
+          <button value="cancel" class="ghost" type="button" id="cancelTourneurBtn">Annuler</button>
+          <button value="default" type="submit">Enregistrer</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

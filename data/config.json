@@ -1,0 +1,51 @@
+{
+  "mediaName": "Rapstar",
+  "urgencyRedDays": 14,
+  "urgencyYellowDays": 30,
+  "statuses": [
+    {
+      "id": "idee",
+      "label": "Idee",
+      "emoji": "💡"
+    },
+    {
+      "id": "demande_envoyee",
+      "label": "Demande envoyee",
+      "emoji": "📤"
+    },
+    {
+      "id": "en_attente",
+      "label": "En attente",
+      "emoji": "⏳"
+    },
+    {
+      "id": "obtenue",
+      "label": "Obtenue",
+      "emoji": "✅"
+    },
+    {
+      "id": "refus",
+      "label": "Refus",
+      "emoji": "❌"
+    },
+    {
+      "id": "a_relancer",
+      "label": "A relancer",
+      "emoji": "🔄"
+    },
+    {
+      "id": "terminee",
+      "label": "Terminee",
+      "emoji": "📸"
+    },
+    {
+      "id": "annule",
+      "label": "Annule",
+      "emoji": "🚫"
+    }
+  ],
+  "logo": {
+    "filename": "logo_1774108454572.jpg",
+    "mimeType": "image/jpeg"
+  }
+}

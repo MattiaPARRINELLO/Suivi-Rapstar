@@ -1,0 +1,121 @@
+[
+  {
+    "id": "cnc_1774108781050_y2dpve",
+    "artist": "Arma Jackson",
+    "date": "2026-03-18",
+    "dates": [
+      "2026-03-18"
+    ],
+    "venue": "La Cigale",
+    "city": "Paris",
+    "status": "terminee",
+    "notes": "Accepté!",
+    "practicalNotes": "• 3 premiers tires sans flash depuis le crash barrière ou le public\n• Pas de photos sur scène, côté de scène ou backstage\n• Pas d’indé, pas d’agences uniquement médias spécialisés et d’information\n• Pas d'utilisation commerciale",
+    "linkedTourneurId": null,
+    "contacts": [
+      {
+        "id": "ctc_1774109112978_95rlqa",
+        "name": "Lou",
+        "role": "Assistante Marketing",
+        "email": "lou@nonstopproductions.fr",
+        "responded": true
+      }
+    ],
+    "history": [
+      {
+        "id": "hst_1774112246341_006qdj",
+        "at": "2026-03-21T16:57:26.341Z",
+        "by": "admin@rapstar.media",
+        "action": "update",
+        "details": "tourneur lie modifie, dates visees mises a jour"
+      },
+      {
+        "id": "hst_1774112262062_iazd7u",
+        "at": "2026-03-21T16:57:42.062Z",
+        "by": "admin@rapstar.media",
+        "action": "update",
+        "details": "dates visees mises a jour"
+      },
+      {
+        "id": "hst_1774112555428_5gr9av",
+        "at": "2026-03-21T17:02:35.428Z",
+        "by": "admin@rapstar.media",
+        "action": "update",
+        "details": "statut: terminee -> obtenue"
+      },
+      {
+        "id": "hst_1774112783259_l4i8ao",
+        "at": "2026-03-21T17:06:23.259Z",
+        "by": "admin@rapstar.media",
+        "action": "update",
+        "details": "statut: obtenue -> terminee"
+      },
+      {
+        "id": "hst_1774112801255_8xvam6",
+        "at": "2026-03-21T17:06:41.255Z",
+        "by": "admin@rapstar.media",
+        "action": "update",
+        "details": "dates visees mises a jour"
+      }
+    ],
+    "updatedBy": "admin@rapstar.media",
+    "updatedAt": "2026-03-21T17:06:41.255Z",
+    "createdAt": "2026-03-21T15:59:41.050Z"
+  },
+  {
+    "id": "cnc_1774110779505_jwl8wo",
+    "artist": "Damso",
+    "date": "2026-05-09",
+    "dates": [
+      "2026-05-09"
+    ],
+    "venue": "Reims Arrena",
+    "city": "Reims",
+    "status": "demande_envoyee",
+    "notes": "Attente de dm pour Amaury",
+    "practicalNotes": "",
+    "linkedTourneurId": null,
+    "contacts": [],
+    "updatedBy": "admin@rapstar.media",
+    "updatedAt": "2026-03-21T16:32:59.505Z",
+    "createdAt": "2026-03-21T16:32:59.505Z"
+  },
+  {
+    "id": "cnc_1774111019413_ve90a3",
+    "artist": "Théodora",
+    "date": "2026-03-29",
+    "dates": [
+      "2026-03-29",
+      "2026-03-30",
+      "2026-03-31",
+      "2026-04-01"
+    ],
+    "venue": "Zénith de Paris",
+    "city": "Paris",
+    "status": "idee",
+    "notes": "",
+    "practicalNotes": "",
+    "linkedTourneurId": "trn_1774111046884_v5thlo",
+    "contacts": [
+      {
+        "id": "ctc_1774111019413_5okbxu",
+        "name": "Remi",
+        "role": "Booking",
+        "email": "remi.politi@aegpresents.fr",
+        "responded": false
+      }
+    ],
+    "history": [
+      {
+        "id": "hst_1774112758541_6yae23",
+        "at": "2026-03-21T17:05:58.541Z",
+        "by": "admin@rapstar.media",
+        "action": "update",
+        "details": "mise a jour generale"
+      }
+    ],
+    "updatedBy": "admin@rapstar.media",
+    "updatedAt": "2026-03-21T17:05:58.541Z",
+    "createdAt": "2026-03-21T16:36:59.413Z"
+  }
+]

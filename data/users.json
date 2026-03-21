@@ -1,0 +1,12 @@
+[
+  {
+    "id": "usr_1",
+    "name": "Rapstar Admin",
+    "email": "admin@rapstar.media"
+  },
+  {
+    "id": "usr_2",
+    "name": "Rapstar Photo",
+    "email": "photo@rapstar.media"
+  }
+]

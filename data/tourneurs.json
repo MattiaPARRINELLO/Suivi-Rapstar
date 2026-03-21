@@ -1,0 +1,23 @@
+[
+  {
+    "id": "trn_1774109047299_we53c6",
+    "name": "NonStop Production",
+    "emails": [
+      "morgan@nonstopproductions.fr",
+      "lou@nonstopproductions.fr"
+    ],
+    "artists": [],
+    "updatedAt": "2026-03-21T16:04:07.299Z",
+    "createdAt": "2026-03-21T16:04:07.299Z"
+  },
+  {
+    "id": "trn_1774111046884_v5thlo",
+    "name": "AEG Present France",
+    "emails": [
+      "remi.politi@aegpresents.fr"
+    ],
+    "artists": [],
+    "updatedAt": "2026-03-21T16:37:26.884Z",
+    "createdAt": "2026-03-21T16:37:26.884Z"
+  }
+]
