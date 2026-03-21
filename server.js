@@ -19,6 +19,7 @@ const FILES = {
   users: path.join(DATA_DIR, 'users.json'),
   config: path.join(DATA_DIR, 'config.json'),
 };
+const ENV_FILE = path.join(__dirname, '.env');
 
 const USER_PASSWORD_ENV_BY_ID = {
   usr_1: 'ADMIN_PASSWORD',
@@ -442,6 +443,52 @@ function getPasswordFromEnvForUser(user) {
   return value.trim() ? value : null;
 }
 
+function formatEnvValue(value) {
+  const sanitized = String(value || '').replace(/\r?\n/g, '').trim();
+  if (!sanitized) return '';
+
+  if (/\s|#|"|'/.test(sanitized)) {
+    return `"${sanitized.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
+  }
+
+  return sanitized;
+}
+
+async function upsertEnvVariable(key, value) {
+  const envKey = String(key || '').trim();
+  const envValue = String(value || '').replace(/\r?\n/g, '').trim();
+
+  if (!envKey) {
+    throw new Error('Cle .env invalide');
+  }
+
+  if (!envValue) {
+    throw new Error('Valeur de mot de passe invalide');
+  }
+
+  let content = '';
+  try {
+    content = await fs.readFile(ENV_FILE, 'utf8');
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+  }
+
+  const lines = content ? content.split(/\r?\n/) : [];
+  const assignLine = `${envKey}=${formatEnvValue(envValue)}`;
+  const keyPattern = new RegExp(`^\\s*${envKey.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&')}\\s*=`);
+  const index = lines.findIndex((line) => keyPattern.test(line));
+
+  if (index >= 0) {
+    lines[index] = assignLine;
+  } else {
+    lines.push(assignLine);
+  }
+
+  const next = `${lines.join('\n').replace(/\n{3,}/g, '\n\n').trimEnd()}\n`;
+  await fs.writeFile(ENV_FILE, next, 'utf8');
+  process.env[envKey] = envValue;
+}
+
 async function ensureUsersWithoutPasswordHashes() {
   const users = await readJson(FILES.users, []);
   const sanitized = users.map((user) => stripSensitiveUserFields(user));
@@ -479,6 +526,11 @@ app.put('/api/auth/profile', requireAuth, async (req, res) => {
   }
 
   const currentUser = users[userIndex];
+  const passwordEnvKey = getPasswordEnvKeyForUser(currentUser);
+  if (!passwordEnvKey) {
+    return res.status(400).json({ error: 'Utilisateur non associe a une variable de mot de passe .env' });
+  }
+
   const envPassword = getPasswordFromEnvForUser(currentUser);
   if (!envPassword) {
     return res.status(500).json({ error: 'Mot de passe utilisateur non configure dans le .env' });
@@ -488,8 +540,8 @@ app.put('/api/auth/profile', requireAuth, async (req, res) => {
     return res.status(401).json({ error: 'Mot de passe actuel invalide' });
   }
 
-  if (newPasswordValue) {
-    return res.status(400).json({ error: 'Le changement de mot de passe se fait via le fichier .env' });
+  if (newPasswordValue && newPasswordValue.length < 6) {
+    return res.status(400).json({ error: 'Le nouveau mot de passe doit faire au moins 6 caracteres' });
   }
 
   const duplicateEmail = users.some(
@@ -501,6 +553,10 @@ app.put('/api/auth/profile', requireAuth, async (req, res) => {
 
   users[userIndex].email = normalizedEmail;
   await writeJson(FILES.users, users.map((user) => stripSensitiveUserFields(user)));
+
+  if (newPasswordValue) {
+    await upsertEnvVariable(passwordEnvKey, newPasswordValue);
+  }
 
   req.session.user = {
     ...req.session.user,

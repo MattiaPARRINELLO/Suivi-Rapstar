@@ -3,6 +3,8 @@ const state = {
   concerts: [],
   tourneurs: [],
   config: null,
+  userSettingsDirty: false,
+  globalConfigDirty: false,
   statusFilter: 'all',
   searchQuery: '',
   dateSort: 'asc',
@@ -533,12 +535,18 @@ function collectConcertPayload() {
 
 function fillSettingsForms() {
   if (!state.user || !state.config) return;
-  setFieldValue(el.userSettingsForm, 'email', state.user.email);
-  setFieldValue(el.globalConfigForm, 'mediaName', state.config.mediaName || 'Rapstar');
-  setFieldValue(el.globalConfigForm, 'urgencyRedDays', state.config.urgencyRedDays);
-  setFieldValue(el.globalConfigForm, 'urgencyYellowDays', state.config.urgencyYellowDays);
-  state.editingStatuses = (state.config.statuses || []).map((entry) => ({ ...entry }));
-  renderStatusEditor();
+
+  if (!state.userSettingsDirty) {
+    setFieldValue(el.userSettingsForm, 'email', state.user.email);
+  }
+
+  if (!state.globalConfigDirty) {
+    setFieldValue(el.globalConfigForm, 'mediaName', state.config.mediaName || 'Rapstar');
+    setFieldValue(el.globalConfigForm, 'urgencyRedDays', state.config.urgencyRedDays);
+    setFieldValue(el.globalConfigForm, 'urgencyYellowDays', state.config.urgencyYellowDays);
+    state.editingStatuses = (state.config.statuses || []).map((entry) => ({ ...entry }));
+    renderStatusEditor();
+  }
 }
 
 async function refreshData() {
@@ -871,17 +879,12 @@ el.userSettingsForm.addEventListener('submit', async (event) => {
     return;
   }
 
-  if (newPassword) {
-    el.userSettingsMessage.classList.add('error');
-    el.userSettingsMessage.textContent = 'Le mot de passe se modifie dans le fichier .env';
-    return;
-  }
-
   try {
     const updated = await api('/api/auth/profile', {
       method: 'PUT',
-      body: JSON.stringify({ email, currentPassword }),
+      body: JSON.stringify({ email, currentPassword, newPassword }),
     });
+    state.userSettingsDirty = false;
     state.user = updated.user;
     el.currentUser.textContent = updated.user.email;
     setFieldValue(el.userSettingsForm, 'currentPassword', '');
@@ -895,6 +898,7 @@ el.userSettingsForm.addEventListener('submit', async (event) => {
 });
 
 el.addStatusBtn.addEventListener('click', () => {
+  state.globalConfigDirty = true;
   state.editingStatuses.push({ id: `status_${Date.now()}`, emoji: '', label: '' });
   renderStatusEditor();
 });
@@ -906,6 +910,7 @@ el.statusList.addEventListener('input', (event) => {
   const index = Number(card.dataset.index);
   const field = target.dataset.statusInput;
   if (!Number.isInteger(index) || !field) return;
+  state.globalConfigDirty = true;
   state.editingStatuses[index][field] = target.value;
 });
 
@@ -914,6 +919,7 @@ el.statusList.addEventListener('click', (event) => {
   if (target.dataset.action !== 'remove-status') return;
   const index = Number(target.dataset.index);
   if (!Number.isInteger(index)) return;
+  state.globalConfigDirty = true;
   state.editingStatuses.splice(index, 1);
   renderStatusEditor();
 });
@@ -935,6 +941,7 @@ el.globalConfigForm.addEventListener('submit', async (event) => {
       method: 'PUT',
       body: JSON.stringify(payload),
     });
+    state.globalConfigDirty = false;
     state.config = config;
     applyMediaName(config.mediaName);
     renderStatusOptions();
@@ -976,6 +983,14 @@ el.uploadLogoBtn.addEventListener('click', async () => {
 
 fetchPublicConfig();
 ensureSession();
+
+el.userSettingsForm.addEventListener('input', () => {
+  state.userSettingsDirty = true;
+});
+
+el.globalConfigForm.addEventListener('input', () => {
+  state.globalConfigDirty = true;
+});
 
 document.addEventListener('keydown', (event) => {
   const target = event.target;
