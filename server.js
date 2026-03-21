@@ -812,7 +812,7 @@ app.post('/api/config/logo', requireAuth, (req, res) => {
 
     if (config.logo?.filename && config.logo.filename !== req.file.filename) {
       const oldPath = path.join(UPLOADS_DIR, config.logo.filename);
-      await fs.unlink(oldPath).catch(() => {});
+      await fs.unlink(oldPath).catch(() => { });
     }
 
     const next = {

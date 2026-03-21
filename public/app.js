@@ -457,20 +457,20 @@ function openConcertDetail(concert) {
   el.detailDates.innerHTML = (concert.dates || []).map((date) => `<li>${escaped(formatDate(date))} (${escaped(date)})</li>`).join('');
   el.detailContacts.innerHTML = (concert.contacts || []).length
     ? (concert.contacts || [])
-        .map(
-          (contact) =>
-            `<li>${escaped(contact.name || '-')} | ${escaped(contact.role || '-')} | ${escaped(contact.email || '-')} | Reponse: ${contact.responded ? 'Oui' : 'Non'}</li>`
-        )
-        .join('')
+      .map(
+        (contact) =>
+          `<li>${escaped(contact.name || '-')} | ${escaped(contact.role || '-')} | ${escaped(contact.email || '-')} | Reponse: ${contact.responded ? 'Oui' : 'Non'}</li>`
+      )
+      .join('')
     : '<li>Aucun contact</li>';
   el.detailNotes.textContent = concert.notes || '-';
   el.detailPracticalNotes.textContent = concert.practicalNotes || '-';
   el.detailHistory.innerHTML = (concert.history || []).length
     ? [...(concert.history || [])]
-        .reverse()
-        .slice(0, 25)
-        .map((item) => `<li>${escaped(new Date(item.at).toLocaleString('fr-FR'))} - ${escaped(item.by || 'system')} - ${escaped(item.details || item.action || '')}</li>`)
-        .join('')
+      .reverse()
+      .slice(0, 25)
+      .map((item) => `<li>${escaped(new Date(item.at).toLocaleString('fr-FR'))} - ${escaped(item.by || 'system')} - ${escaped(item.details || item.action || '')}</li>`)
+      .join('')
     : '<li>Aucun historique</li>';
   el.concertDetailDialog.showModal();
 }
